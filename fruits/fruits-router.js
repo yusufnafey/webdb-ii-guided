@@ -1,45 +1,50 @@
-const express = require('express');
-const knex = require('knex');
+const express = require("express");
+const knex = require("knex");
 
+// this is how we connect knex to the database
 const db = knex({
-  client: 'sqlite3',
+  // driver to use
+  client: "sqlite3",
+  // how to find the database
   connection: {
-    filename: './data/produce.db3'
+    // from the root folder
+    filename: "./data/produce.db3"
   },
+  // required for sqlite
   useNullAsDefault: true
 });
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const fruits = await db('fruits');
-    res.json(fruits); 
+    const fruits = await db("fruits");
+    res.json(fruits);
   } catch (err) {
-    res.status(500).json({ message: 'Failed to retrieve fruits' });
+    res.status(500).json({ message: "Failed to retrieve fruits" });
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const fruit = await db('fruits').where({ id });
-    
+    const fruit = await db("fruits").where({ id });
+
     res.json(fruit);
   } catch (err) {
-    res.status(500).json({ message: 'Failed to retrieve fruit' });
+    res.status(500).json({ message: "Failed to retrieve fruit" });
   }
 });
 
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const fruitData = req.body;
-    const [ id ] = await db('fruits').insert(fruitData);
-    const newFruitEntry = await db('fruits').where({ id });
-  
+    const [id] = await db("fruits").insert(fruitData);
+    const newFruitEntry = await db("fruits").where({ id });
+
     res.status(201).json(newFruitEntry);
   } catch (err) {
-    console.log('POST error', err);
+    console.log("POST error", err);
     res.status(500).json({ message: "Failed to store data" });
   }
 });
