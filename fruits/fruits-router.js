@@ -1,18 +1,22 @@
 const express = require("express");
 const knex = require("knex");
 
-// this is how we connect knex to the database
-const db = knex({
-  // driver to use
-  client: "sqlite3",
-  // how to find the database
-  connection: {
-    // from the root folder
-    filename: "./data/produce.db3"
-  },
-  // required for sqlite
-  useNullAsDefault: true
-});
+const knexConfig = require("../knexfile");
+
+const db = knex(knexConfig.development);
+
+// // this is how we connect knex to the database
+// const db = knex({
+//   // driver to use
+//   client: "sqlite3",
+//   // how to find the database
+//   connection: {
+//     // from the root folder
+//     filename: "./data/produce.db3"
+//   },
+//   // required for sqlite
+//   useNullAsDefault: true
+// });
 
 const router = express.Router();
 
